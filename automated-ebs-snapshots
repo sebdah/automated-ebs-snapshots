@@ -23,7 +23,10 @@ import automated_ebs_snapshots
 
 
 if __name__ == '__main__':
-    automated_ebs_snapshots.main()
+    try:
+        automated_ebs_snapshots.main()
+    except KeyboardInterrupt:
+        sys.exit(0)
     sys.exit(0)
 
 sys.exit(1)
