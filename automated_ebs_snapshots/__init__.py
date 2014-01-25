@@ -1,92 +1,45 @@
 """ Automatic AWS EBS snapshot handling """
 import argparse
-import logging
-import logging.config
 
-from automated_ebs_snapshots import config_parser
 from automated_ebs_snapshots import connection_manager
-
-logging.config.dictConfig({
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'standard': {
-            'format':
-            '%(asctime)s - auto-ebs - %(levelname)s - %(message)s'
-        },
-    },
-    'handlers': {
-        'default': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-            'formatter': 'standard'
-        },
-    },
-    'loggers': {
-        '': {
-            'handlers': ['default'],
-            'level': 'INFO',
-            'propagate': True
-        },
-        'lib.bundle_manager': {
-            'handlers': ['default'],
-            'level': 'DEBUG',
-            'propagate': False
-        },
-        'lib.config_handler': {
-            'handlers': ['default'],
-            'level': 'DEBUG',
-            'propagate': False
-        },
-        'lib.connection_handler': {
-            'handlers': ['default'],
-            'level': 'DEBUG',
-            'propagate': False
-        },
-        'lib.deployment_manager': {
-            'handlers': ['default'],
-            'level': 'DEBUG',
-            'propagate': False
-        }
-    }
-})
-logger = logging.getLogger(__name__)
+from automated_ebs_snapshots import volume_manager
 
 
 def main():
     """ Main function """
     parser = argparse.ArgumentParser(
         description='Automatic AWS EBS snapshot handling')
-    parser.add_argument(
-        '-c', '--config',
-        required=True,
-        help='Path to the configuration file')
+    aws_config_ag = parser.add_argument_group(
+        title='AWS configuration options')
+    aws_config_ag.add_argument(
+        '--access-key-id',
+        help='AWS access key')
+    aws_config_ag.add_argument(
+        '--secret-access-key',
+        help='AWS secret access key')
+    aws_config_ag.add_argument(
+        '--region',
+        default='us-east-1',
+        help='AWS region')
+    actions_ag = parser.add_argument_group(
+        title='Actions')
+    actions_ag.add_argument(
+        '--add',
+        metavar='VOLUME_ID',
+        help=(
+            'Add a new EBS volume to the watch list. '
+            'Usage: --add vol-12345678'))
+    actions_ag.add_argument(
+        '--list',
+        action='count',
+        help='List volumes that we are watching')
     args = parser.parse_args()
-
-    # Read configuration
-    config = config_parser.get_configuration(args.config)
 
     # Connect to AWS
     connection = connection_manager.connect_to_ec2(
-        config['aws-access-key-id'],
-        config['aws-secret-access-key'],
-        config['aws-region'])
+        args.region,
+        args.access_key_id,
+        args.secret_access_key)
 
-    for volume in config['volumes']:
-        ensure_snapshots(connection, volume)
-
-def ensure_snapshots(connection, volume):
-    """ Ensure that we have snapshots for a given volume
-
-    :type connection: boto.ec2.connection.EC2Connection
-    :param connection: EC2 connection object
-    :type volume: str
-    :param volume: AWS volume name
-    """
-    snapshots = connection.get_all_snapshots(
-        filters={
-            'volume-id': volume,
-            'tag:SkymillAutoEBS': 'true'
-        })
-
-
+    if args.list:
+        volume_manager.list_watched_volumes(connection)
