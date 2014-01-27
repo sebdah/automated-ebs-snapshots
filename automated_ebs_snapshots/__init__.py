@@ -55,11 +55,11 @@ def main():
         args.access_key_id,
         args.secret_access_key)
 
-    if args.list:
-        volume_manager.list(connection)
-
     if args.watch:
         volume_manager.watch(connection, args.watch, args.interval)
 
     if args.unwatch:
         volume_manager.unwatch(connection, args.unwatch)
+
+    if args.list:
+        volume_manager.list(connection)
