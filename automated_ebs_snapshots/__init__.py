@@ -3,6 +3,7 @@ import argparse
 
 from automated_ebs_snapshots import connection_manager
 from automated_ebs_snapshots import volume_manager
+from automated_ebs_snapshots.valid_intervals import VALID_INTERVALS
 
 
 def main():
@@ -26,7 +27,8 @@ def main():
     general_ag.add_argument(
         '-i', '--interval',
         default='daily',
-        help='Volume snapshotting interval')
+        help='Volume snapshotting interval. Valid values are: {}'.format(
+            ', '.join(VALID_INTERVALS)))
     actions_ag = parser.add_argument_group(
         title='Actions')
     actions_ag.add_argument(
