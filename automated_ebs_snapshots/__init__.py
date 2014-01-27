@@ -30,15 +30,21 @@ def main():
     actions_ag = parser.add_argument_group(
         title='Actions')
     actions_ag.add_argument(
+        '--list',
+        action='count',
+        help='List volumes that we are watching')
+    actions_ag.add_argument(
+        '--unwatch',
+        metavar='VOLUME_ID',
+        help=(
+            'Remove an EBS volume from the watch list. '
+            'Usage: --unwatch vol-12345678'))
+    actions_ag.add_argument(
         '--watch',
         metavar='VOLUME_ID',
         help=(
             'Add a new EBS volume to the watch list. '
             'Usage: --watch vol-12345678'))
-    actions_ag.add_argument(
-        '--list',
-        action='count',
-        help='List volumes that we are watching')
     args = parser.parse_args()
 
     # Connect to AWS
@@ -52,3 +58,6 @@ def main():
 
     if args.watch:
         volume_manager.watch(connection, args.watch, args.interval)
+
+    if args.unwatch:
+        volume_manager.unwatch(connection, args.unwatch)
