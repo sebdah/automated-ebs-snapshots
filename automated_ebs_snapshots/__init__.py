@@ -5,6 +5,7 @@ import logging.config
 from automated_ebs_snapshots.command_line_options import args
 from automated_ebs_snapshots import config_file_parser
 from automated_ebs_snapshots import connection_manager
+from automated_ebs_snapshots import snapshot_manager
 from automated_ebs_snapshots import volume_manager
 
 logging.config.dictConfig({
@@ -80,3 +81,6 @@ def main():
 
     if args.list:
         volume_manager.list(connection)
+
+    if args.run:
+        snapshot_manager.run(connection)

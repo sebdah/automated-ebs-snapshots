@@ -45,4 +45,10 @@ admin_actions_ag.add_argument(
     help=(
         'Add a new EBS volume to the watch list. '
         'Usage: --watch vol-12345678'))
+actions_ag = parser.add_argument_group(
+    title='Actions')
+actions_ag.add_argument(
+    '--run',
+    action='count',
+    help='Run the watcher to ensure snapshots')
 args = parser.parse_args()
