@@ -1,7 +1,6 @@
 """ Module handling the snapshots """
 import logging
 import datetime
-import time
 
 from automated_ebs_snapshots import volume_manager
 from automated_ebs_snapshots.valid_intervals import VALID_INTERVALS
@@ -9,22 +8,16 @@ from automated_ebs_snapshots.valid_intervals import VALID_INTERVALS
 logger = logging.getLogger(__name__)
 
 
-def run(connection, interval=60):
+def run(connection):
     """ Ensure that we have snapshots for a given volume
 
     :type connection: boto.ec2.connection.EC2Connection
     :param connection: EC2 connection object
-    :type interval: int
-    :param interval: Number of seconds to wait between checks
     """
-    while True:
-        volumes = volume_manager.get_watched_volumes(connection)
+    volumes = volume_manager.get_watched_volumes(connection)
 
-        for volume in volumes:
-            _ensure_snapshot(connection, volume)
-
-        logger.info('Waiting {} seconds until next check'.format(interval))
-        time.sleep(interval)
+    for volume in volumes:
+        _ensure_snapshot(connection, volume)
 
 
 def _create_snapshot(volume):
