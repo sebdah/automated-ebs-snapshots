@@ -1,7 +1,15 @@
 """ Command line options """
 import argparse
+import sys
+import os.path
+from ConfigParser import SafeConfigParser
 
 from automated_ebs_snapshots.valid_intervals import VALID_INTERVALS
+
+settings = SafeConfigParser()
+settings.read('{}/settings.conf'.format(
+    os.path.dirname(os.path.realpath(__file__))))
+
 
 parser = argparse.ArgumentParser(
     description='Automatic AWS EBS snapshot handling')
@@ -27,6 +35,11 @@ general_ag.add_argument(
     default='daily',
     help='Volume snapshotting interval. Valid values are: {}'.format(
         ', '.join(VALID_INTERVALS)))
+general_ag.add_argument(
+    '--version',
+    action='count',
+    help='Print the Automated EBS Snapshots version and exit')
+
 admin_actions_ag = parser.add_argument_group(
     title='Administrative actions')
 admin_actions_ag.add_argument(
@@ -52,3 +65,8 @@ actions_ag.add_argument(
     action='count',
     help='Run the watcher to ensure snapshots')
 args = parser.parse_args()
+
+if args.version:
+    print('Automated EBS Snapshots version {}'.format(
+        settings.get('general', 'version')))
+    sys.exit(0)
