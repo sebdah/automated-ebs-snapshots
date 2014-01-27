@@ -2,7 +2,40 @@
 from automated_ebs_snapshots.valid_intervals import VALID_INTERVALS
 
 
-def list_watched_volumes(connection):
+def watch(connection, volume_id, interval='daily'):
+    """ Start watching a new volume
+
+    :type connection: boto.ec2.connection.EC2Connection
+    :param connection: EC2 connection object
+    :type volume_id: str
+    :param volume_id: VolumeID to add to the watchlist
+    :type interval: str
+    :param interval: Backup interval [hourly|daily|weekly|monthly|yearly]
+    :returns: bool - True if the watch was successful
+    """
+    try:
+        volume = connection.get_all_volumes(volume_ids=[volume_id])[0]
+    except KeyError:
+        print('Volume {} not found'.format(volume_id))
+        return False
+
+    if interval not in VALID_INTERVALS:
+        print('{} is not a valid interval. Valid intervals are {}'.format(
+            interval, ', '.join(VALID_INTERVALS)))
+
+    # Remove the tag first
+    volume.remove_tag('SkymillEBSSnapshotInterval')
+
+    # Re-add the tag
+    volume.add_tag('SkymillEBSSnapshotInterval', value=interval)
+
+    print('Updated the rotation interval to {} for {}'.format(
+        interval, volume_id))
+
+    return True
+
+
+def list(connection):
     """ List watched EBS volumes
 
     :type connection: boto.ec2.connection.EC2Connection

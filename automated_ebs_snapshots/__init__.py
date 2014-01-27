@@ -21,14 +21,20 @@ def main():
         '--region',
         default='us-east-1',
         help='AWS region')
+    general_ag = parser.add_argument_group(
+        title='General')
+    general_ag.add_argument(
+        '-i', '--interval',
+        default='daily',
+        help='Volume snapshotting interval')
     actions_ag = parser.add_argument_group(
         title='Actions')
     actions_ag.add_argument(
-        '--add',
+        '--watch',
         metavar='VOLUME_ID',
         help=(
             'Add a new EBS volume to the watch list. '
-            'Usage: --add vol-12345678'))
+            'Usage: --watch vol-12345678'))
     actions_ag.add_argument(
         '--list',
         action='count',
@@ -42,4 +48,7 @@ def main():
         args.secret_access_key)
 
     if args.list:
-        volume_manager.list_watched_volumes(connection)
+        volume_manager.list(connection)
+
+    if args.watch:
+        volume_manager.watch(connection, args.watch, args.interval)
