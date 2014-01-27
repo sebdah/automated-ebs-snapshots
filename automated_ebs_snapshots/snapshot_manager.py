@@ -51,14 +51,14 @@ def _ensure_snapshot(connection, volume):
     :type volume: boto.ec2.volume.Volume
     :param volume: Volume to check
     """
-    if 'SkymillEBSSnapshotInterval' not in volume.tags:
+    if 'AutomatedEBSSnapshots' not in volume.tags:
         logger.warning(
-            'Missing tag SkymillEBSSnapshotInterval for volume {}'.format(
+            'Missing tag AutomatedEBSSnapshots for volume {}'.format(
                 volume.id))
         return
 
-    interval = volume.tags['SkymillEBSSnapshotInterval']
-    if volume.tags['SkymillEBSSnapshotInterval'] not in VALID_INTERVALS:
+    interval = volume.tags['AutomatedEBSSnapshots']
+    if volume.tags['AutomatedEBSSnapshots'] not in VALID_INTERVALS:
         logger.warning(
             '"{}" is not a valid snapshotting interval for volume {}'.format(
                 interval, volume.id))

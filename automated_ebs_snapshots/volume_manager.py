@@ -14,7 +14,7 @@ def get_watched_volumes(connection):
     :returns: [boto.ec2.volume.Volume] -- List of volumes
     """
     return connection.get_all_volumes(
-        filters={'tag-key': 'SkymillEBSSnapshotInterval'})
+        filters={'tag-key': 'AutomatedEBSSnapshots'})
 
 
 def list(connection):
@@ -37,18 +37,18 @@ def list(connection):
     logger.info('---------------+-------------------------------')
 
     for volume in volumes:
-        if 'SkymillEBSSnapshotInterval' not in volume.tags:
+        if 'AutomatedEBSSnapshots' not in volume.tags:
             logger.info('{volume_id:<14} | {interval:<12}'.format(
                 volume_id=volume.id,
                 interval='Interval tag not found'))
-        elif volume.tags['SkymillEBSSnapshotInterval'] not in VALID_INTERVALS:
+        elif volume.tags['AutomatedEBSSnapshots'] not in VALID_INTERVALS:
             logger.info('{volume_id:<14} | {interval:<12}'.format(
                 volume_id=volume.id,
                 interval='Invalid interval'))
         else:
             logger.info('{volume_id:<14} | {interval:<12}'.format(
                 volume_id=volume.id,
-                interval=volume.tags['SkymillEBSSnapshotInterval']))
+                interval=volume.tags['AutomatedEBSSnapshots']))
 
     logger.info('---------------+-------------------------------')
 
@@ -64,7 +64,7 @@ def unwatch(connection, volume_id):
     """
     try:
         volume = connection.get_all_volumes(volume_ids=[volume_id])[0]
-        volume.remove_tag('SkymillEBSSnapshotInterval')
+        volume.remove_tag('AutomatedEBSSnapshots')
     except KeyError:
         pass
 
@@ -96,10 +96,10 @@ def watch(connection, volume_id, interval='daily'):
                 interval, ', '.join(VALID_INTERVALS)))
 
     # Remove the tag first
-    volume.remove_tag('SkymillEBSSnapshotInterval')
+    volume.remove_tag('AutomatedEBSSnapshots')
 
     # Re-add the tag
-    volume.add_tag('SkymillEBSSnapshotInterval', value=interval)
+    volume.add_tag('AutomatedEBSSnapshots', value=interval)
 
     logger.info('Updated the rotation interval to {} for {}'.format(
         interval, volume_id))
