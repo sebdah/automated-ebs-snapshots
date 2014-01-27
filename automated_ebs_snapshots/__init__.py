@@ -29,19 +29,19 @@ def main():
         default='daily',
         help='Volume snapshotting interval. Valid values are: {}'.format(
             ', '.join(VALID_INTERVALS)))
-    actions_ag = parser.add_argument_group(
-        title='Actions')
-    actions_ag.add_argument(
+    admin_actions_ag = parser.add_argument_group(
+        title='Administrative actions')
+    admin_actions_ag.add_argument(
         '--list',
         action='count',
         help='List volumes that we are watching')
-    actions_ag.add_argument(
+    admin_actions_ag.add_argument(
         '--unwatch',
         metavar='VOLUME_ID',
         help=(
             'Remove an EBS volume from the watch list. '
             'Usage: --unwatch vol-12345678'))
-    actions_ag.add_argument(
+    admin_actions_ag.add_argument(
         '--watch',
         metavar='VOLUME_ID',
         help=(
