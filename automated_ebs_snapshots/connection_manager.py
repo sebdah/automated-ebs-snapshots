@@ -1,5 +1,10 @@
 """ Handles connections to AWS """
+import logging
+import sys
+
 from boto import ec2
+
+logger = logging.getLogger(__name__)
 
 
 def connect_to_ec2(region='us-east-1', access_key=None, secret_key=None):
@@ -13,6 +18,7 @@ def connect_to_ec2(region='us-east-1', access_key=None, secret_key=None):
     :param secret_key: AWS secret access key
     :returns: boto.ec2.connection.EC2Connection -- EC2 connection
     """
+    logger.info('Connecting to AWS EC2 in {}'.format(region))
     if access_key:
         connection = ec2.connect_to_region(
             region,
@@ -20,5 +26,9 @@ def connect_to_ec2(region='us-east-1', access_key=None, secret_key=None):
             aws_secret_access_key=secret_key)
     else:
         connection = ec2.connect_to_region(region)
+
+    if not connection:
+        logger.error('An error occurred when connecting to EC2')
+        sys.exit(1)
 
     return connection
