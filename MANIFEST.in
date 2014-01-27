@@ -1,0 +1,5 @@
+recursive-include automated_ebs_snapshots *
+include automated-ebs-snapshots
+include README
+include LICENSE
+
