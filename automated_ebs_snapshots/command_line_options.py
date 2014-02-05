@@ -24,7 +24,7 @@ aws_config_ag.add_argument(
 aws_config_ag.add_argument(
     '--region',
     default='us-east-1',
-    help='AWS region')
+    help='AWS region. Default: us-east-1')
 general_ag = parser.add_argument_group(
     title='General')
 general_ag.add_argument(
@@ -33,14 +33,16 @@ general_ag.add_argument(
 general_ag.add_argument(
     '-i', '--interval',
     default='daily',
-    help='Volume snapshotting interval. Valid values are: {}'.format(
-        ', '.join(VALID_INTERVALS)))
+    help=(
+        'Volume snapshotting interval. Default: daily. '
+        'Valid values are: {}'.format(', '.join(VALID_INTERVALS))))
 general_ag.add_argument(
     '-r', '--retention',
     default=0,
     type=int,
     help=(
         'Number of snapshots to keep. 0 == keep all. '
+        'Default: 0. '
         'WARNING: This setting will delete older snapshots!'))
 general_ag.add_argument(
     '--version',
