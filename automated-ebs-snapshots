@@ -1,8 +1,10 @@
 #!/usr/bin/env python
-""" Dynamic DynamoDB - Auto provisioning for AWS DynamoDB
+""" Automated EBS automated_ebs_snapshots
+
+Provides automatic scheduled snapshots of AWS EC2 EBS volumes
 
 APACHE LICENSE 2.0
-Copyright 2013 Sebastian Dahlgren
+Copyright 2013 Skymill Solutions
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
