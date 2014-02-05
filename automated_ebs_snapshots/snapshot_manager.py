@@ -13,11 +13,13 @@ def run(connection):
 
     :type connection: boto.ec2.connection.EC2Connection
     :param connection: EC2 connection object
+    :returns: None
     """
     volumes = volume_manager.get_watched_volumes(connection)
 
     for volume in volumes:
         _ensure_snapshot(connection, volume)
+        _remove_old_snapshots(connection, volume)
 
 
 def _create_snapshot(volume):
@@ -43,6 +45,7 @@ def _ensure_snapshot(connection, volume):
     :param connection: EC2 connection object
     :type volume: boto.ec2.volume.Volume
     :param volume: Volume to check
+    :returns: None
     """
     if 'AutomatedEBSSnapshots' not in volume.tags:
         logger.warning(
@@ -87,3 +90,40 @@ def _ensure_snapshot(connection, volume):
         _create_snapshot(volume)
     elif interval == 'yearly' and min_delta > 3600*24*365:
         _create_snapshot(volume)
+    else:
+        logger.info('No need for a new snapshot of {}'.format(volume.id))
+
+
+def _remove_old_snapshots(connection, volume):
+    """ Remove old snapshots
+
+    :type connection: boto.ec2.connection.EC2Connection
+    :param connection: EC2 connection object
+    :type volume: boto.ec2.volume.Volume
+    :param volume: Volume to check
+    :returns: None
+    """
+    if 'AutomatedEBSSnapshotsRetention' not in volume.tags:
+        logger.warning(
+            'Missing tag AutomatedEBSSnapshotsRetention for volume {}'.format(
+                volume.id))
+        return
+    retention = int(volume.tags['AutomatedEBSSnapshotsRetention'])
+
+    snapshots = connection.get_all_snapshots(filters={'volume-id': volume.id})
+
+    # Sort the list based on the start time
+    snapshots.sort(key=lambda x: x.start_time)
+
+    # Remove snapshots we want to keep
+    snapshots = snapshots[:-int(retention)]
+
+    if not snapshots:
+        logger.info('No old snapshots to remove')
+        return
+
+    for snapshot in snapshots:
+        logger.info('Deleting snapshot {}'.format(snapshot.id))
+        snapshot.delete()
+
+    logger.info('Done deleting snapshots')

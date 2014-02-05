@@ -74,7 +74,11 @@ def main():
         region, access_key_id, secret_access_key)
 
     if args.watch:
-        volume_manager.watch(connection, args.watch, args.interval)
+        volume_manager.watch(
+            connection,
+            args.watch,
+            args.interval,
+            args.retention)
 
     if args.unwatch:
         volume_manager.unwatch(connection, args.unwatch)

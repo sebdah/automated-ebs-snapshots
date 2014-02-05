@@ -30,27 +30,33 @@ def list(connection):
         logger.info('No watched volumes found')
         return
 
-    logger.info('---------------+-------------------------------')
-    logger.info('{volume:<14} | {interval:<12}'.format(
+    logger.info('---------------+--------------+-------------')
+    logger.info('{volume:<14} | {interval:<12} | {retention:<10}'.format(
         volume='Volume ID',
-        interval='Interval'))
-    logger.info('---------------+-------------------------------')
+        interval='Interval',
+        retention='Retention'))
+    logger.info('---------------+--------------+-------------')
 
     for volume in volumes:
         if 'AutomatedEBSSnapshots' not in volume.tags:
-            logger.info('{volume_id:<14} | {interval:<12}'.format(
-                volume_id=volume.id,
-                interval='Interval tag not found'))
+            interval = 'Interval tag not found'
         elif volume.tags['AutomatedEBSSnapshots'] not in VALID_INTERVALS:
-            logger.info('{volume_id:<14} | {interval:<12}'.format(
-                volume_id=volume.id,
-                interval='Invalid interval'))
+            interval = 'Invalid interval'
         else:
-            logger.info('{volume_id:<14} | {interval:<12}'.format(
-                volume_id=volume.id,
-                interval=volume.tags['AutomatedEBSSnapshots']))
+            interval = volume.tags['AutomatedEBSSnapshots']
 
-    logger.info('---------------+-------------------------------')
+        if 'AutomatedEBSSnapshotsRetention' not in volume.tags:
+            retention = 0
+        else:
+            retention = volume.tags['AutomatedEBSSnapshotsRetention']
+
+        logger.info(
+            '{volume_id:<14} | {interval:<12} | {retention:<10}'.format(
+                volume_id=volume.id,
+                interval=interval,
+                retention=retention))
+
+    logger.info('---------------+--------------+-------------')
 
 
 def unwatch(connection, volume_id):
@@ -73,7 +79,7 @@ def unwatch(connection, volume_id):
     return True
 
 
-def watch(connection, volume_id, interval='daily'):
+def watch(connection, volume_id, interval='daily', retention=0):
     """ Start watching a new volume
 
     :type connection: boto.ec2.connection.EC2Connection
@@ -82,6 +88,8 @@ def watch(connection, volume_id, interval='daily'):
     :param volume_id: VolumeID to add to the watchlist
     :type interval: str
     :param interval: Backup interval [hourly|daily|weekly|monthly|yearly]
+    :type retention: int
+    :param retention: Number of snapshots to keep. 0 == keep all
     :returns: bool - True if the watch was successful
     """
     try:
@@ -100,6 +108,12 @@ def watch(connection, volume_id, interval='daily'):
 
     # Re-add the tag
     volume.add_tag('AutomatedEBSSnapshots', value=interval)
+
+    # Remove the tag first
+    volume.remove_tag('AutomatedEBSSnapshotsRetention')
+
+    # Re-add the tag
+    volume.add_tag('AutomatedEBSSnapshotsRetention', value=int(retention))
 
     logger.info('Updated the rotation interval to {} for {}'.format(
         interval, volume_id))

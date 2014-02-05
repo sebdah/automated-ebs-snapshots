@@ -36,10 +36,16 @@ general_ag.add_argument(
     help='Volume snapshotting interval. Valid values are: {}'.format(
         ', '.join(VALID_INTERVALS)))
 general_ag.add_argument(
+    '-r', '--retention',
+    default=0,
+    type=int,
+    help=(
+        'Number of snapshots to keep. 0 == keep all. '
+        'WARNING: This setting will delete older snapshots!'))
+general_ag.add_argument(
     '--version',
     action='count',
     help='Print the Automated EBS Snapshots version and exit')
-
 admin_actions_ag = parser.add_argument_group(
     title='Administrative actions')
 admin_actions_ag.add_argument(
