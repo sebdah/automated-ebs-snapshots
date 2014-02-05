@@ -1,22 +1,27 @@
-# automated-ebs-snapshots
+automated-ebs-snapshots
+=======================
 
 Automated EBS Snapshots helps you ensure that you have up to date snapshots of
 your EBS volumes.
 
 All you need to do to get started is documented below.
 
-## Installation
+Installation
+------------
+::
 
     pip install automated-ebs-snapshots
 
-## Authentication configuration
+Authentication configuration
+----------------------------
 
-Automated EBS snapshots can be configured either via command line options
-or via command line options.
+Automated EBS snapshots can be configured either via command line options or via command line options.
 
-### Command line options
+Command line options
+^^^^^^^^^^^^^^^^^^^^
 
 You can use the following command line options to authenticate to AWS.
+::
 
     AWS configuration options:
       --access-key-id ACCESS_KEY_ID
@@ -25,55 +30,72 @@ You can use the following command line options to authenticate to AWS.
                             AWS secret access key
       --region REGION       AWS region
 
-### Configuration file
+Configuration file
+^^^^^^^^^^^^^^^^^^
 
 Create a configuration file anywhere on you file system.
+::
 
     [general]
     access-key-id: xxxx
     secret-access-key: xxxxxxxx
     region: eu-west-1
 
-Then use the `--config` command line option to point at your
-configuration file.
+Then use the ``--config`` command line option to point at your configuration file.
 
-## Watching and unwatching volumes
+Watching and unwatching volumes
+-------------------------------
 
-### Start watching a volume
+Start watching a volume
+^^^^^^^^^^^^^^^^^^^^^^^
 
 In order to enable automatic snapshots, you need to start watching the volume.
-The following command will add `vol-13245678` to the watchlist with snapshots
+The following command will add ``vol-13245678`` to the watchlist with snapshots
 created daily.
+::
 
     automated-ebs-snapshots --config ~/auto-ebs-snapshots.conf --watch vol-12345678 --interval daily
 
-### List watched volumes
+List watched volumes
+^^^^^^^^^^^^^^^^^^^^
 
 List the currently watched volumes and their backup interval
+::
 
-    automated-ebs-snapshots --config ~/auto-ebs-snapshots.conf --list
+    automated-ebs-snapshots --config ~/automated-ebs-snapshots.conf --list
 
-### Stop watching a volume
+Stop watching a volume
+^^^^^^^^^^^^^^^^^^^^^^
 
 To stop creating automated backups for a volume, run this:
+::
 
-    automated-ebs-snapshots --config ~/auto-ebs-snapshots.conf --unwatch vol-12345678
+    automated-ebs-snapshots --config ~/automated-ebs-snapshots.conf --unwatch vol-12345678
 
-## Creating snapshots
+Creating snapshots
+------------------
 
 Now, to start taking snapshots you will need to have Automated EBS Snapshots
-running in the background.
+running.
+::
 
-    automated-ebs-snapshots --config ~/auto-ebs-snapshots.conf --run
+    automated-ebs-snapshots --config ~/automated-ebs-snapshots.conf --run
 
 It will check if there are any volumes with no or too old snapshots. New
 snapshots will be created if needed.
 
-## Author
+There is no daemon mode currently, so you will need to run something like this.
+::
 
-This project is maintained by [Sebastian Dahlgren](http://www.sebastiandahlgren.se) and it is supported by [Skymill Solutions](http://www.skymillsolutions.com).
+  nohup while true ; do automated-ebs-snapshots --config ~/automated-ebs-snapshots.conf --run >> /var/log/automated-ebs-snapshots.log 2>&1 ; sleep 600 ; done
 
-## License
+Author
+------
+
+This project is maintained by `Sebastian Dahlgren <http://www.sebastiandahlgren.se>`__ and it is supported by `Skymill Solutions <http://www.skymillsolutions.com>`__.
+
+License
+-------
 
 APACHE LICENSE 2.0
 Copyright 2014 Skymill Solutions
