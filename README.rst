@@ -84,8 +84,11 @@ To stop creating automated backups for a volume, run this:
 Creating snapshots
 ------------------
 
-Now, to start taking snapshots you will need to have Automated EBS Snapshots
-running.
+Now, to start taking snapshots you will need to have Automated EBS Snapshots running. You can either run ``automated-ebs-snapshots`` manually (i.e. scheduled in crontab or such) or have it running in daemon mode.
+
+Manual execution
+^^^^^^^^^^^^^^^^
+Running ``automated-ebs-snapshots`` manually:
 ::
 
     automated-ebs-snapshots --config ~/automated-ebs-snapshots.conf --run
@@ -93,10 +96,22 @@ running.
 It will check if there are any volumes with no or too old snapshots. New
 snapshots will be created if needed.
 
-There is no daemon mode currently, so you will need to run something like this.
+Daemon mode
+^^^^^^^^^^^
+Start the daemon by running
 ::
 
-  nohup while true ; do automated-ebs-snapshots --config ~/automated-ebs-snapshots.conf --run >> /var/log/automated-ebs-snapshots.log 2>&1 ; sleep 600 ; done
+  automated-ebs-snapshots --config ~/automated-ebs-snapshots.conf --deamon start
+
+Stop the daemon with
+::
+
+  automated-ebs-snapshots --config ~/automated-ebs-snapshots.conf --deamon stop
+
+You can also restart it using
+::
+
+  automated-ebs-snapshots --config ~/automated-ebs-snapshots.conf --deamon restart
 
 Author
 ------
