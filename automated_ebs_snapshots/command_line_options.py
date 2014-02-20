@@ -48,6 +48,15 @@ general_ag.add_argument(
     '--version',
     action='count',
     help='Print the Automated EBS Snapshots version and exit')
+general_ag.add_argument(
+    '--log-file',
+    default='/var/log/automated-ebs-snapshots.log',
+    help='Path to the log file. Default: /var/log/automated-ebs-snapshots.log')
+general_ag.add_argument(
+    '--daemon',
+    help=(
+        'Run Automatic EBS Snapshots in daemon mode. Valid modes are '
+        '[start|stop|restart|foreground]'))
 admin_actions_ag = parser.add_argument_group(
     title='Administrative actions')
 admin_actions_ag.add_argument(
