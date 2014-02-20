@@ -30,34 +30,34 @@ logging.config.dictConfig({
             'level': 'DEBUG',
             'class': 'logging.handlers.TimedRotatingFileHandler',
             'formatter': 'standard',
-            'filename': '/var/log/automatic-ebs-snapshots.log',
+            'filename': args.log_file,
             'when': 'midnight',
             'backupCount': 5
         }
     },
     'loggers': {
         '': {
-            'handlers': ['default'],
+            'handlers': ['default', 'file'],
             'level': 'INFO',
             'propagate': True
         },
         'lib.bundle_manager': {
-            'handlers': ['default'],
+            'handlers': ['default', 'file'],
             'level': 'DEBUG',
             'propagate': False
         },
         'lib.config_handler': {
-            'handlers': ['default'],
+            'handlers': ['default', 'file'],
             'level': 'DEBUG',
             'propagate': False
         },
         'lib.connection_handler': {
-            'handlers': ['default'],
+            'handlers': ['default', 'file'],
             'level': 'DEBUG',
             'propagate': False
         },
         'lib.deployment_manager': {
-            'handlers': ['default'],
+            'handlers': ['default', 'file'],
             'level': 'DEBUG',
             'propagate': False
         }
