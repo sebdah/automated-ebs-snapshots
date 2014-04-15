@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """ Handle EBS volumes """
 import logging
 
@@ -30,12 +31,25 @@ def list(connection):
         logger.info('No watched volumes found')
         return
 
-    logger.info('---------------+--------------+-------------')
-    logger.info('{volume:<14} | {interval:<12} | {retention:<10}'.format(
-        volume='Volume ID',
-        interval='Interval',
-        retention='Retention'))
-    logger.info('---------------+--------------+-------------')
+    logger.info(
+        '+----------------'
+        '+----------------------'
+        '+--------------'
+        '+------------+')
+    logger.info(
+        '| {volume:<14} '
+        '| {volume_name:<20.20} '
+        '| {interval:<12} '
+        '| {retention:<10} |'.format(
+            volume='Volume ID',
+            volume_name='Volume name',
+            interval='Interval',
+            retention='Retention'))
+    logger.info(
+        '+----------------'
+        '+----------------------'
+        '+--------------'
+        '+------------+')
 
     for volume in volumes:
         if 'AutomatedEBSSnapshots' not in volume.tags:
@@ -50,13 +64,27 @@ def list(connection):
         else:
             retention = volume.tags['AutomatedEBSSnapshotsRetention']
 
+        # Get the volume name
+        try:
+            volume_name = volume.tags['Name']
+        except KeyError:
+            volume_name = ''
+
         logger.info(
-            '{volume_id:<14} | {interval:<12} | {retention:<10}'.format(
+            '| {volume_id:<14} '
+            '| {volume_name:<20.20} '
+            '| {interval:<12} '
+            '| {retention:<10} |'.format(
                 volume_id=volume.id,
+                volume_name=volume_name,
                 interval=interval,
                 retention=retention))
 
-    logger.info('---------------+--------------+-------------')
+    logger.info(
+        '+----------------'
+        '+----------------------'
+        '+--------------'
+        '+------------+')
 
 
 def unwatch(connection, volume_id):
