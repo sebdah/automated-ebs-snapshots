@@ -130,6 +130,6 @@ def _remove_old_snapshots(connection, volume):
             snapshot.delete()
         except EC2ResponseError as error:
             logger.warning('Could not remove snapshot: {}'.format(
-                error.reason))
+                error.message))
 
     logger.info('Done deleting snapshots')
