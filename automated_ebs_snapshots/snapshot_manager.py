@@ -2,6 +2,8 @@
 import logging
 import datetime
 
+from boto.exception import EC2ResponseError
+
 from automated_ebs_snapshots import volume_manager
 from automated_ebs_snapshots.valid_intervals import VALID_INTERVALS
 
@@ -124,6 +126,10 @@ def _remove_old_snapshots(connection, volume):
 
     for snapshot in snapshots:
         logger.info('Deleting snapshot {}'.format(snapshot.id))
-        snapshot.delete()
+        try:
+            snapshot.delete()
+        except EC2ResponseError as error:
+            logger.warning('Could not remove snapshot: {}'.format(
+                error.reason))
 
     logger.info('Done deleting snapshots')
