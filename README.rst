@@ -113,6 +113,16 @@ You can also restart it using
 
   automated-ebs-snapshots --config ~/automated-ebs-snapshots.conf --deamon restart
 
+Release notes
+-------------
+
+0.3.0
+^^^^^
+
+- Print volume Name tag in --list (`#3 <https://github.com/skymill/automated-ebs-snapshots/issues/3>`__)
+- Support authentication using instance profiles (`#5 <https://github.com/skymill/automated-ebs-snapshots/issues/5>`__)
+- Only write logs to file if --log-file is specified (`#2 <https://github.com/skymill/automated-ebs-snapshots/issues/2>`__)
+
 Author
 ------
 

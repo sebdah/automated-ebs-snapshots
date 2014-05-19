@@ -50,8 +50,7 @@ general_ag.add_argument(
     help='Print the Automated EBS Snapshots version and exit')
 general_ag.add_argument(
     '--log-file',
-    default='/var/log/automated-ebs-snapshots.log',
-    help='Path to the log file. Default: /var/log/automated-ebs-snapshots.log')
+    help='Path to file to send logs to')
 general_ag.add_argument(
     '--daemon',
     help=(

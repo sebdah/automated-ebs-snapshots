@@ -11,7 +11,7 @@ from automated_ebs_snapshots import snapshot_manager
 from automated_ebs_snapshots import volume_manager
 from automated_ebs_snapshots.daemon import Daemon
 
-logging.config.dictConfig({
+LOG_CONFIG = {
     'version': 1,
     'disable_existing_loggers': False,
     'formatters': {
@@ -25,44 +25,51 @@ logging.config.dictConfig({
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
             'formatter': 'standard'
-        },
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.handlers.TimedRotatingFileHandler',
-            'formatter': 'standard',
-            'filename': args.log_file,
-            'when': 'midnight',
-            'backupCount': 5
         }
     },
     'loggers': {
         '': {
-            'handlers': ['default', 'file'],
+            'handlers': ['default'],
             'level': 'INFO',
             'propagate': True
         },
         'lib.bundle_manager': {
-            'handlers': ['default', 'file'],
+            'handlers': ['default'],
             'level': 'DEBUG',
             'propagate': False
         },
         'lib.config_handler': {
-            'handlers': ['default', 'file'],
+            'handlers': ['default'],
             'level': 'DEBUG',
             'propagate': False
         },
         'lib.connection_handler': {
-            'handlers': ['default', 'file'],
+            'handlers': ['default'],
             'level': 'DEBUG',
             'propagate': False
         },
         'lib.deployment_manager': {
-            'handlers': ['default', 'file'],
+            'handlers': ['default'],
             'level': 'DEBUG',
             'propagate': False
         }
     }
-})
+}
+
+if args.log_file:
+    LOG_CONFIG['handlers']['file'] = {
+        'level': 'DEBUG',
+        'class': 'logging.handlers.TimedRotatingFileHandler',
+        'formatter': 'standard',
+        'filename': args.log_file,
+        'when': 'midnight',
+        'backupCount': 5
+    }
+
+    for logger in LOG_CONFIG['loggers'].keys():
+        LOG_CONFIG['loggers'][logger]['handlers'].append('file')
+
+logging.config.dictConfig(LOG_CONFIG)
 logger = logging.getLogger(__name__)
 
 
