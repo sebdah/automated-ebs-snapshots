@@ -24,7 +24,7 @@ Installation
 Authentication configuration
 ----------------------------
 
-Automated EBS snapshots can be configured either via command line options or via command line options.
+Automated EBS snapshots can be configured either via command line options or using a configuration file.
 
 Command line options
 ^^^^^^^^^^^^^^^^^^^^
