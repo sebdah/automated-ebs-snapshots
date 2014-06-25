@@ -21,25 +21,21 @@ def connect_to_ec2(region='us-east-1', access_key=None, secret_key=None):
     """
     logger.info('Connecting to AWS EC2 in {}'.format(region))
 
-    # Fetch instance metadata
-    metadata = get_instance_metadata(timeout=1, num_retries=1)
-    if metadata:
-        try:
-            profile_name = metadata['iam']['info'][u'InstanceProfileArn']
-            region = metadata['placement']['availability-zone'][:-1]
-        except KeyError:
-            profile_name = None
-
     if access_key:
         # Connect using supplied credentials
         connection = ec2.connect_to_region(
             region,
             aws_access_key_id=access_key,
             aws_secret_access_key=secret_key)
-    elif metadata:
-        # Connect using instance profile
-        connection = ec2.connect_to_region(region, profile_name=profile_name)
     else:
+        # Fetch instance metadata
+        metadata = get_instance_metadata(timeout=1, num_retries=1)
+        if metadata:
+            try:
+                region = metadata['placement']['availability-zone'][:-1]
+            except KeyError:
+                pass
+
         # Connect using env vars or boto credentials
         connection = ec2.connect_to_region(region)
 
