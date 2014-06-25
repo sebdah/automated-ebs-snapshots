@@ -116,6 +116,11 @@ You can also restart it using
 Release notes
 -------------
 
+0.3.1
+^^^^^
+
+- Fixed IAM Instance Profile authentication for boto >= 2.29.0 (`#6 <https://github.com/skymill/automated-ebs-snapshots/issues/6>`__)
+
 0.3.0
 ^^^^^
 
