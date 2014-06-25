@@ -116,6 +116,11 @@ You can also restart it using
 Release notes
 -------------
 
+0.3.2
+^^^^^
+
+- Bumped requirement to boto >= 2.29.0 (`#7 <https://github.com/skymill/automated-ebs-snapshots/issues/7>`__)
+
 0.3.1
 ^^^^^
 
