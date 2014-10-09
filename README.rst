@@ -101,17 +101,17 @@ Daemon mode
 Start the daemon by running
 ::
 
-  automated-ebs-snapshots --config ~/automated-ebs-snapshots.conf --deamon start
+  automated-ebs-snapshots --config ~/automated-ebs-snapshots.conf --daemon start
 
 Stop the daemon with
 ::
 
-  automated-ebs-snapshots --config ~/automated-ebs-snapshots.conf --deamon stop
+  automated-ebs-snapshots --config ~/automated-ebs-snapshots.conf --daemon stop
 
 You can also restart it using
 ::
 
-  automated-ebs-snapshots --config ~/automated-ebs-snapshots.conf --deamon restart
+  automated-ebs-snapshots --config ~/automated-ebs-snapshots.conf --daemon restart
 
 Release notes
 -------------
