@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 """ Handle EBS volumes """
 import logging
+import re
+
+from boto.exception import EC2ResponseError
 
 from automated_ebs_snapshots.valid_intervals import VALID_INTERVALS
 
@@ -99,7 +102,7 @@ def unwatch(connection, volume_id):
     try:
         volume = connection.get_all_volumes(volume_ids=[volume_id])[0]
         volume.remove_tag('AutomatedEBSSnapshots')
-    except KeyError:
+    except EC2ResponseError:
         pass
 
     logger.info('Removed {} from the watchlist'.format(volume_id))
@@ -122,7 +125,7 @@ def watch(connection, volume_id, interval='daily', retention=0):
     """
     try:
         volume = connection.get_all_volumes(volume_ids=[volume_id])[0]
-    except KeyError:
+    except EC2ResponseError:
         logger.warning('Volume {} not found'.format(volume_id))
         return False
 
@@ -147,3 +150,108 @@ def watch(connection, volume_id, interval='daily', retention=0):
         interval, volume_id))
 
     return True
+
+def get_volume_id(connection, volume):
+    """
+    Input can be Volume ID or Volume name. Return Volume ID
+
+    :type connection: boto.ec2.connection.EC2Connection
+    :param connection: EC2 connection object
+    :type volume: str
+    :param volume: Volume ID or Volume Name
+    :returns: Volume ID or None if volume does not exist
+    """
+    volume_id_pattern = re.compile('vol-\w{8}')
+    if volume_id_pattern.match(volume):
+        # input is volume id
+        try:
+            connection.get_all_volumes(volume_ids=[volume])
+            volume_id = volume
+        except EC2ResponseError:
+            logger.warning('Volume {} not found'.format(volume))
+            return None
+    else:
+        # input is volume name
+        name_filter = {'tag-key': 'Name','tag-value':volume}
+        volumes = connection.get_all_volumes(filters=name_filter)
+        if not volumes:
+            logger.warning('Volume {} not found'.format(volume))
+            return None
+        if len(volumes) > 1:
+            logger.warning('Volume {} not unique'.format(volume))
+        volume_id = volumes[0].id
+    return volume_id
+
+
+def watch_from_file(connection, file_name):
+    """ Start watching a new volume
+
+    :type connection: boto.ec2.connection.EC2Connection
+    :param connection: EC2 connection object
+    :type file_name: str
+    :param file_name: path to config file
+    :returns: None
+    """
+    # Read config file
+    f = open(file_name, 'r')
+    lines = f.readlines()
+    f.close()
+
+    for line in lines:
+        volume, interval, retention = line.rstrip().split(',')
+        watch(connection, get_volume_id(connection, volume),
+              interval, retention)
+
+def unwatch_from_file(connection, file_name):
+    """ Start watching a new volume
+
+    :type connection: boto.ec2.connection.EC2Connection
+    :param connection: EC2 connection object
+    :type file_name: str
+    :param file_name: path to config file
+    :returns: None
+    """
+    f = open(file_name, 'r')
+    lines = f.readlines()
+    f.close()
+
+    for line in lines:
+        volume, interval, retention = line.rstrip().split(',')
+        unwatch(connection, get_volume_id(connection, volume))
+
+def list_snapshots(connection, volume):
+    """ List all snapshots for the volume
+    """
+
+    logger.info(
+        '+----------------'
+        '+----------------------'
+        '+---------------------------+')
+    logger.info(
+        '| {snapshot:<14} '
+        '| {snapshot_name:<20.20} '
+        '| {created:<25} |'.format(
+            snapshot='Snapshot ID',
+            snapshot_name='Snapshot name',
+            created='Created'))
+    logger.info(
+        '+----------------'
+        '+----------------------'
+        '+---------------------------+')
+
+    vid = get_volume_id(connection, volume)
+    if vid:
+        vol = connection.get_all_volumes(volume_ids=[vid])[0]
+        for snap in vol.snapshots():
+            logger.info(
+                '| {snapshot:<14} '
+                '| {snapshot_name:<20.20} '
+                '| {created:<25} |'.format(
+                    snapshot=snap.id,
+                    snapshot_name=snap.tags.get('Name', ''),
+                    created=snap.start_time))
+
+    logger.info(
+        '+----------------'
+        '+----------------------'
+        '+---------------------------+')
