@@ -151,6 +151,7 @@ def watch(connection, volume_id, interval='daily', retention=0):
 
     return True
 
+
 def get_volume_id(connection, volume):
     """
     Get Volume ID from the given volume. Input can be volume id
@@ -176,7 +177,7 @@ def get_volume_id(connection, volume):
             return None
     else:
         # input is volume name
-        name_filter = {'tag-key': 'Name','tag-value':volume}
+        name_filter = {'tag-key': 'Name', 'tag-value': volume}
         volumes = connection.get_all_volumes(filters=name_filter)
         if not volumes:
             logger.warning('Volume {} not found'.format(volume))
@@ -205,6 +206,7 @@ def watch_from_file(connection, file_name):
                 get_volume_id(connection, volume),
                 interval, retention)
 
+
 def unwatch_from_file(connection, file_name):
     """ Start watching a new volume
 
@@ -218,6 +220,7 @@ def unwatch_from_file(connection, file_name):
         for line in filehandle.xreadlines():
             volume, interval, retention = line.rstrip().split(',')
             unwatch(connection, get_volume_id(connection, volume))
+
 
 def list_snapshots(connection, volume):
     """ List all snapshots for the volume
