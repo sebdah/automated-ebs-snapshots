@@ -147,6 +147,12 @@ You can also restart it using
 Release notes
 -------------
 
+0.4.0
+^^^^^
+
+- Added support for reading volumes from file (`#13 <https://github.com/skymill/automated-ebs-snapshots/issues/13>`__). Thanks `@yumminhuang <https://github.com/yumminhuang>`__ for the pull request
+- Now supports managing volumes by tag `Name` in addition to `volume-id` (`#13 <https://github.com/skymill/automated-ebs-snapshots/issues/13>`__). Thanks `@yumminhuang <https://github.com/yumminhuang>`__ for the pull request
+
 0.3.2
 ^^^^^
 
