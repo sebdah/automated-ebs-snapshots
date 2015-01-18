@@ -155,6 +155,15 @@ def main():
     if args.unwatch:
         volume_manager.unwatch(connection, args.unwatch)
 
+    if args.watch_file:
+        volume_manager.watch_from_file(connection, args.watch_file)
+
+    if args.unwatch_file:
+        volume_manager.unwatch_from_file(connection, args.unwatch_file)
+
+    if args.snapshots:
+        volume_manager.list_snapshots(connection, args.snapshots)
+
     if args.list:
         volume_manager.list(connection)
 

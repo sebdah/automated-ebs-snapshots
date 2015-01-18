@@ -65,6 +65,21 @@ created daily.
 
     automated-ebs-snapshots --config ~/auto-ebs-snapshots.conf --watch vol-12345678 --interval daily
 
+Add volumes to watch list
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To add lots of volumes in one time, we can create a configuration file to define volumes(support volume id or Name tag), interval and retention.
+::
+
+  vol-d9d6d6af,weekly,2
+  volume1,weekly,4
+  volume2,daily,0
+
+Then run the following command
+::
+
+    automated-ebs-snapshots --config ~/auto-ebs-snapshots.conf --watch-file volumes.conf
+
 List watched volumes
 ^^^^^^^^^^^^^^^^^^^^
 
@@ -80,6 +95,22 @@ To stop creating automated backups for a volume, run this:
 ::
 
     automated-ebs-snapshots --config ~/automated-ebs-snapshots.conf --unwatch vol-12345678
+
+Remove volumes from watch list
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To remove all volumes in the configuration file, just run:
+::
+
+    automated-ebs-snapshots --config ~/auto-ebs-snapshots.conf --unwatch-file volumes.conf
+
+List snapshots for a volume
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+List all snapshots for the given volume id or volume name
+::
+
+    automated-ebs-snapshots --config ~/automated-ebs-snapshots.conf --snapshots vol-d9d6d6af
 
 Creating snapshots
 ------------------
@@ -115,6 +146,12 @@ You can also restart it using
 
 Release notes
 -------------
+
+0.4.0
+^^^^^
+
+- Added support for reading volumes from file (`#13 <https://github.com/skymill/automated-ebs-snapshots/issues/13>`__). Thanks `@yumminhuang <https://github.com/yumminhuang>`__ for the pull request
+- Now supports managing volumes by tag `Name` in addition to `volume-id` (`#13 <https://github.com/skymill/automated-ebs-snapshots/issues/13>`__). Thanks `@yumminhuang <https://github.com/yumminhuang>`__ for the pull request
 
 0.3.2
 ^^^^^

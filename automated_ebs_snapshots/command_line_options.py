@@ -74,6 +74,23 @@ admin_actions_ag.add_argument(
     help=(
         'Add a new EBS volume to the watch list. '
         'Usage: --watch vol-12345678'))
+admin_actions_ag.add_argument(
+    '--snapshots',
+    metavar='VOLUME',
+    help='List all snapshots of this EBS volume')
+admin_actions_ag.add_argument(
+    '--unwatch-file',
+    metavar='FILE_NAME',
+    help=(
+        'Remove all EBS volumes in the config file from the watch list. '
+        'Usage: --unwatch-file volumes.conf'))
+admin_actions_ag.add_argument(
+    '--watch-file',
+    metavar='FILE_NAME',
+    help=(
+        'Add all EBS volumes in the config file to the watch list. '
+        'Usage: --watch-file volumes.conf'))
+
 actions_ag = parser.add_argument_group(
     title='Actions')
 actions_ag.add_argument(
