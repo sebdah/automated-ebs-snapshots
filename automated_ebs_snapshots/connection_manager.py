@@ -19,10 +19,10 @@ def connect_to_ec2(region='us-east-1', access_key=None, secret_key=None):
     :param secret_key: AWS secret access key
     :returns: boto.ec2.connection.EC2Connection -- EC2 connection
     """
-    logger.info('Connecting to AWS EC2 in {}'.format(region))
 
     if access_key:
         # Connect using supplied credentials
+        logger.info('Connecting to AWS EC2 in {}'.format(region))
         connection = ec2.connect_to_region(
             region,
             aws_access_key_id=access_key,
@@ -37,6 +37,7 @@ def connect_to_ec2(region='us-east-1', access_key=None, secret_key=None):
                 pass
 
         # Connect using env vars or boto credentials
+        logger.info('Connecting to AWS EC2 in {}'.format(region))
         connection = ec2.connect_to_region(region)
 
     if not connection:

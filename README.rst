@@ -147,6 +147,11 @@ You can also restart it using
 Release notes
 -------------
 
+0.4.1
+^^^^^
+
+- Fix for logging incorrect region information when using instance role (`#19 <https://github.com/skymill/automated-ebs-snapshots/pull/19>`__). Thanks `@robaman <https://github.com/robaman>`__ for the pull request
+
 0.4.0
 ^^^^^
 
