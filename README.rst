@@ -24,7 +24,35 @@ Installation
 Authentication configuration
 ----------------------------
 
+IAM Policy
+^^^^^^^^^^^^^^^^^^^^
+
+First you need to create an IAM user and give that user correct Permissions. Below is an example policy:
+::
+    {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Sid": "Stmt1453988686666",
+                "Effect": "Allow",
+                "Action": [
+                    "ec2:CreateSnapshot",
+                    "ec2:CreateTags",
+                    "ec2:DeleteTags",
+                    "ec2:DeleteSnapshot",
+                    "ec2:DescribeSnapshots",
+                    "ec2:DescribeVolumes"
+                ],
+                "Resource": [
+                    "*"
+                ]
+            }
+        ]
+    }
+
+
 Automated EBS snapshots can be configured either via command line options or using a configuration file.
+
 
 Command line options
 ^^^^^^^^^^^^^^^^^^^^
