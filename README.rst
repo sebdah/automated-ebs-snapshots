@@ -42,7 +42,7 @@ You can use the following command line options to authenticate to AWS.
 Configuration file
 ^^^^^^^^^^^^^^^^^^
 
-Create a configuration file anywhere on you file system. If parameters for `access-key-id` and `secret-access-key` are not specified, the instance's IAM role will be used instead.
+Create a configuration file anywhere on you file system. If parameters for access-key-id and `secret-access-key` are not defined, the instance's IAM role will be used instead.
 ::
 
     [general]
