@@ -35,12 +35,12 @@ def list(connection):
         return
 
     logger.info(
-        '+----------------'
+        '+-----------------------'
         '+----------------------'
         '+--------------'
         '+------------+')
     logger.info(
-        '| {volume:<14} '
+        '| {volume:<21} '
         '| {volume_name:<20.20} '
         '| {interval:<12} '
         '| {retention:<10} |'.format(
@@ -49,7 +49,7 @@ def list(connection):
             interval='Interval',
             retention='Retention'))
     logger.info(
-        '+----------------'
+        '+-----------------------'
         '+----------------------'
         '+--------------'
         '+------------+')
@@ -84,7 +84,7 @@ def list(connection):
                 retention=retention))
 
     logger.info(
-        '+----------------'
+        '+-----------------------'
         '+----------------------'
         '+--------------'
         '+------------+')
