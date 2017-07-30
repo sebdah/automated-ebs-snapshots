@@ -175,6 +175,11 @@ You can also restart it using
 Release notes
 -------------
 
+0.5.0
+^^^^^
+
+- Add better long EBS ID's (`#33 <https://github.com/skymill/automated-ebs-snapshots/pull/33>`__)
+
 0.4.1
 ^^^^^
 
