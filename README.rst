@@ -1,14 +1,7 @@
 automated-ebs-snapshots
 =======================
-.. image:: https://pypip.in/d/automated-ebs-snapshots/badge.png
-    :target: https://pypi.python.org/pypi//automated-ebs-snapshots/
-    :alt: Downloads
-.. image:: https://pypip.in/v/automated-ebs-snapshots/badge.png
-    :target: https://pypi.python.org/pypi/automated-ebs-snapshots/
-    :alt: Latest Version
-.. image:: https://pypip.in/license/automated-ebs-snapshots/badge.png
-    :target: https://pypi.python.org/pypi/automated-ebs-snapshots/
-    :alt: License
+.. image:: https://badge.fury.io/py/automated-ebs-snapshots.svg
+    :target: https://badge.fury.io/py/automated-ebs-snapshots
 
 Automated EBS Snapshots helps you ensure that you have up to date snapshots of
 your EBS volumes.
