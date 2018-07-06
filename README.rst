@@ -2,6 +2,9 @@ automated-ebs-snapshots
 =======================
 .. image:: https://badge.fury.io/py/automated-ebs-snapshots.svg
     :target: https://badge.fury.io/py/automated-ebs-snapshots
+.. image:: https://api.codeclimate.com/v1/badges/cbf2a51a48f04b2e0bec/maintainability
+   :target: https://codeclimate.com/github/skymill/automated-ebs-snapshots/maintainability
+   :alt: Maintainability
 
 Automated EBS Snapshots helps you ensure that you have up to date snapshots of
 your EBS volumes.
