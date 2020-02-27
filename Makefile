@@ -1,6 +1,6 @@
 install:
-	python setup.py build
-	python setup.py install
+	python2 setup.py build
+	python2 setup.py install
 release:
-	python setup.py register
-	python setup.py sdist upload
+	python2 setup.py register
+	python2 setup.py sdist upload
