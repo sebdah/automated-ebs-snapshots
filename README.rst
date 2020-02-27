@@ -151,6 +151,13 @@ Running ``automated-ebs-snapshots`` manually:
 It will check if there are any volumes with no or too old snapshots. New
 snapshots will be created if needed.
 
+Force run
+^^^^^^^^^
+It's possible to force run the command by using the ``--force-run`` parameter:
+::
+
+    automated-ebs-snapshots --config ~/automated-ebs-snapshots.conf --force-run
+
 Daemon mode
 ^^^^^^^^^^^
 Start the daemon by running
