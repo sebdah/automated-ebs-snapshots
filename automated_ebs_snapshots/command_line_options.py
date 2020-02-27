@@ -99,7 +99,7 @@ actions_ag.add_argument(
     help='Run the watcher to ensure snapshots')
 
 actions_ag.add_argument(
-    '--forcerun',
+    '--force-run',
     action='count',
     help='Similar to --run, but always take a snapshot and purge '
          'snapshots that should be removed.')
