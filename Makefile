@@ -1,6 +1,6 @@
 install:
-	python2 setup.py build
-	python2 setup.py install
+	python setup.py build
+	python setup.py install
 release:
-	python2 setup.py register
-	python2 setup.py sdist upload
+	python setup.py register
+	python3 -m twine upload --repository-url https://upload.pypi.org/legacy/ dist/*
