@@ -1,9 +1,9 @@
 """ Setup script for PyPI """
+import configparser
 import os
 from setuptools import setup
-from ConfigParser import SafeConfigParser
 
-settings = SafeConfigParser()
+settings = configparser.ConfigParser()
 settings.read(os.path.realpath('automated_ebs_snapshots/settings.conf'))
 
 
