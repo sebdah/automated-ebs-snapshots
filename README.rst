@@ -178,6 +178,12 @@ You can also restart it using
 Release notes
 -------------
 
+0.6.0
+^^^^^
+
+- [feature] Introducing ``--force-run`` flag (`#27 <https://github.com/skymill/automated-ebs-snapshots/pull/27>`__). Fixes `#23 <https://github.com/skymill/automated-ebs-snapshots/pull/23>`__
+- [bugfix] Fix for timestamp format change (`#37 <https://github.com/skymill/automated-ebs-snapshots/pull/37>`__). Fixes `#36 <https://github.com/skymill/automated-ebs-snapshots/pull/36>`__
+
 0.5.0
 ^^^^^
 
