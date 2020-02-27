@@ -151,6 +151,13 @@ Running ``automated-ebs-snapshots`` manually:
 It will check if there are any volumes with no or too old snapshots. New
 snapshots will be created if needed.
 
+Force run
+^^^^^^^^^
+It's possible to force run the command by using the ``--force-run`` parameter:
+::
+
+    automated-ebs-snapshots --config ~/automated-ebs-snapshots.conf --force-run
+
 Daemon mode
 ^^^^^^^^^^^
 Start the daemon by running
@@ -170,6 +177,12 @@ You can also restart it using
 
 Release notes
 -------------
+
+0.6.0
+^^^^^
+
+- [feature] Introducing ``--force-run`` flag (`#27 <https://github.com/skymill/automated-ebs-snapshots/pull/27>`__). Fixes `#23 <https://github.com/skymill/automated-ebs-snapshots/pull/23>`__
+- [bugfix] Fix for timestamp format change (`#37 <https://github.com/skymill/automated-ebs-snapshots/pull/37>`__). Fixes `#36 <https://github.com/skymill/automated-ebs-snapshots/pull/36>`__
 
 0.5.0
 ^^^^^

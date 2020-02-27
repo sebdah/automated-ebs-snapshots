@@ -10,7 +10,7 @@ from automated_ebs_snapshots.valid_intervals import VALID_INTERVALS
 logger = logging.getLogger(__name__)
 
 
-def run(connection):
+def run(connection, force=False):
     """ Ensure that we have snapshots for a given volume
 
     :type connection: boto.ec2.connection.EC2Connection
@@ -20,7 +20,7 @@ def run(connection):
     volumes = volume_manager.get_watched_volumes(connection)
 
     for volume in volumes:
-        _ensure_snapshot(connection, volume)
+        _ensure_snapshot(connection, volume, force)
         _remove_old_snapshots(connection, volume)
 
 
@@ -40,7 +40,7 @@ def _create_snapshot(volume):
     return snapshot
 
 
-def _ensure_snapshot(connection, volume):
+def _ensure_snapshot(connection, volume, force):
     """ Ensure that a given volume has an appropriate snapshot
 
     :type connection: boto.ec2.connection.EC2Connection
@@ -64,8 +64,8 @@ def _ensure_snapshot(connection, volume):
 
     snapshots = connection.get_all_snapshots(filters={'volume-id': volume.id})
 
-    # Create a snapshot if we don't have any
-    if not snapshots:
+    # Create a snapshot if there are not already any or if forced
+    if not snapshots or force:
         _create_snapshot(volume)
         return
 
@@ -73,7 +73,7 @@ def _ensure_snapshot(connection, volume):
     for snapshot in snapshots:
         timestamp = datetime.datetime.strptime(
             snapshot.start_time,
-            '%Y-%m-%dT%H:%M:%S.000Z')
+            '%Y-%m-%dT%H:%M:%S.%fZ')
         delta_seconds = int(
             (datetime.datetime.utcnow() - timestamp).total_seconds())
 
