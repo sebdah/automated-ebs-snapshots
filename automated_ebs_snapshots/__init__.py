@@ -170,5 +170,5 @@ def main():
     if args.run:
         snapshot_manager.run(connection)
 
-    if args.forcerun:
+    if args.force_run:
         snapshot_manager.run(connection, force=True)
