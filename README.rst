@@ -178,6 +178,11 @@ You can also restart it using
 Release notes
 -------------
 
+0.6.1
+^^^^^
+
+- [bugfix] Fix command line argument ``--force-run`` (`#40 <https://github.com/skymill/automated-ebs-snapshots/pull/40>`__). Fixes `#39 <https://github.com/skymill/automated-ebs-snapshots/pull/39>`__
+
 0.6.0
 ^^^^^
 
